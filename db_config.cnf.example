@@ -1,0 +1,5 @@
+[client]
+user=insert_user
+password=insert_password
+host=insert_host
+database=insert_database

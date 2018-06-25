@@ -175,7 +175,7 @@ from mysql.connector import errorcode
 print("Connecting to database...")
 
 try:
-    cnx = mysql.connector.connect(option_files='connectors.cnf', raise_on_warnings=True)
+    cnx = mysql.connector.connect(option_files='db_config.cnf', raise_on_warnings=True)
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Something is wrong with your user name or password")
