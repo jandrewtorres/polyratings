@@ -7,13 +7,15 @@ chromedriver_url = "./chromedriver"
 driver = webdriver.Chrome(chromedriver_url)
 prof_list_url = 'http://polyratings.com/list.php'
 
+bad_urls = ['http://polyratings.com/eval.php?profid=728', 'http://polyratings.com/eval.php?profid=717', 'http://polyratings.com/eval.php?profid=715', 'http://polyratings.com/eval.php?profid=694','http://polyratings.com/eval.php?profid=693', 'http://polyratings.com/eval.php?profid=509', 'http://polyratings.com/eval.php?profid=542', 'http://polyratings.com/eval.php?profid=583']
+
 def get_prof_urls(url, driver):
     driver.get(url)
     xpath = '/html/body/div/a[*]'
     urls = []
     for link in driver.find_elements(By.XPATH, xpath):
         urls.append(link.get_attribute('href'))
-    return urls
+    return [url for url in urls if url not in bad_urls]
 
 def parse_prof_name(s):
     return s.replace(',', "").split()
@@ -72,7 +74,7 @@ class Professor:
             "   `pid` INTEGER, "
             "   `f_name` VARCHAR(20), "
             "   `l_name` VARCHAR(20), "
-            "   `department` VARCHAR(30), "
+            "   `department` VARCHAR(50), "
             "   PRIMARY KEY (`pid`) "
             ") ENGINE=InnoDB")
 
@@ -113,16 +115,17 @@ class Review:
             "CREATE TABLE `review` ("
             "  `rid` INTEGER,"
             "  `pid` INTEGER,"
-            "  `content` VARCHAR(1500),"
+            "  `content` VARCHAR(5000),"
             "  `class_name` VARCHAR(20),"
             "  `rating_overall` DOUBLE(4,2),"
             "  `rating_difficulty` DOUBLE(4,2),"
             "  `reason_taking` enum('R', 'S', 'E'),"
             "  `date_posted` DATETIME,"
-            "  `grade_received` VARCHAR(3),"
-            "  `class_standing` VARCHAR(10),"
+            "  `grade_received` VARCHAR(10),"
+            "  `class_standing` VARCHAR(20),"
             "  PRIMARY KEY (`rid`),"
             "  FOREIGN KEY (`pid`) REFERENCES `professor` (`pid`)"
+            "    ON DELETE CASCADE"
             ") ENGINE=InnoDB")
 
 professors = []
@@ -134,7 +137,7 @@ prof_urls = get_prof_urls(prof_list_url, driver)
 
 print('Begin scraping data...')
 
-for prof_url in prof_urls:
+for prof_url in prof_urls[2430:]:
     print('\t> scraping data from page ' + str(pid_count + 1) + '/' + str(len(prof_urls)) + ': ' + prof_url)
     driver.get(prof_url)
     prof_name = parse_prof_name(driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div/h1/strong').text)
@@ -205,6 +208,7 @@ else:
 
     print("Inserting values into tables...")
     for prof in professors:
+        print(str(len(prof.department)) + " " + prof.department)
         cursor.execute(prof.insert_statement(), prof.insert_values())
         for review in prof.reviews:
             cursor.execute(review.insert_statement(), review.insert_values())

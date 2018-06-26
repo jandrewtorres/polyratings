@@ -1,0 +1,16 @@
+{
+  "name": "polyratings",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jandrewtorres/polyratings.git",
+  "author": "John Torres <jandrewtorres5@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
+  }
+}
