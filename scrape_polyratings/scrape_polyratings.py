@@ -194,6 +194,12 @@ else:
     TABLES['professor'] = Professor.create_statement()
     TABLES['review'] = Review.create_statement()
 
+    try:
+        cursor.execute("DROP TABLE IF EXISTS `review`")
+        cursor.execute("DROP TABLE IF EXISTS `professor`")
+    except:
+        pass
+
     for name, ddl in TABLES.items():
         try:
             print("Creating table {}: ".format(name), end='')
@@ -208,7 +214,6 @@ else:
 
     print("Inserting values into tables...")
     for prof in professors:
-        print(str(len(prof.department)) + " " + prof.department)
         cursor.execute(prof.insert_statement(), prof.insert_values())
         for review in prof.reviews:
             cursor.execute(review.insert_statement(), review.insert_values())
