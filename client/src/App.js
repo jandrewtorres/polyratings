@@ -35,7 +35,7 @@ class App extends Component {
               */}
               {professors.map((professor, index) =>
                 <li key={index}>
-                  {professor}
+                  {professor.f_name}
                 </li>
               )}
             </ul>

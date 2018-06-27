@@ -1,3 +1,4 @@
 chromedriver
 db_config.cnf
 node_modules
+.env
