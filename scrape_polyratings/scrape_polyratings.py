@@ -137,7 +137,8 @@ prof_urls = get_prof_urls(prof_list_url, driver)
 
 print('Begin scraping data...')
 
-for prof_url in prof_urls[2430:]:
+# for prof_url in prof_urls[2430:]:
+for prof_url in prof_urls:
     print('\t> scraping data from page ' + str(pid_count + 1) + '/' + str(len(prof_urls)) + ': ' + prof_url)
     driver.get(prof_url)
     prof_name = parse_prof_name(driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/div/h1/strong').text)
@@ -187,22 +188,23 @@ except mysql.connector.Error as err:
     else:
         print(err)
 else:
-    print("Connected successfully...")
     cursor = cnx.cursor()
 
     TABLES = {}
     TABLES['professor'] = Professor.create_statement()
     TABLES['review'] = Review.create_statement()
 
+    print("\t> dropping tables...")
     try:
         cursor.execute("DROP TABLE IF EXISTS `review`")
         cursor.execute("DROP TABLE IF EXISTS `professor`")
     except:
         pass
 
+
     for name, ddl in TABLES.items():
         try:
-            print("Creating table {}: ".format(name), end='')
+            print("\t> creating table {}: ".format(name), end='')
             cursor.execute(ddl)
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
@@ -212,8 +214,9 @@ else:
         else:
             print("OK")
 
-    print("Inserting values into tables...")
-    for prof in professors:
+    print("\t> inserting values into tables...")
+    for index, prof in professors:
+        print("\t\t> inserting professor " + str(index) + "/" + str(len(professors)) + ": " + prof.f_name + " " + prof.l_name)
         cursor.execute(prof.insert_statement(), prof.insert_values())
         for review in prof.reviews:
             cursor.execute(review.insert_statement(), review.insert_values())

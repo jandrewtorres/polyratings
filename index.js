@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const logger = require('morgan');
 const professorRouter = require('./routes/ProfessorRouter.js');
 const path = require('path');
 
@@ -10,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(logger('dev'));
 
 // Add routes
 app.use('/api/professors', professorRouter);
