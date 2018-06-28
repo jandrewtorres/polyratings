@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
 
 // Add routes
-app.use('/api/professors', professorRouter);
+app.use('/api/professor', professorRouter);
 
 // Error handler
 app.use(function(err, req, res, next) {

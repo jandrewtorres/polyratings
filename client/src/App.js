@@ -12,7 +12,7 @@ class App extends Component {
 
   getProfessors = () => {
     // Get the professors and store them in state
-    fetch('/api/professors')
+    fetch('/api/professor')
       .then(res => res.json())
       .then(professors => this.setState({ professors }));
   }
