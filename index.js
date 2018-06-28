@@ -16,6 +16,12 @@ app.use(logger('dev'));
 // Add routes
 app.use('/api/professors', professorRouter);
 
+// Error handler
+app.use(function(err, req, res, next) {
+  console.log(err.message);
+  res.status(err.status || 500).send(err.message);
+});
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
