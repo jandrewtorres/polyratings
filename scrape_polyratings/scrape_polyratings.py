@@ -73,7 +73,6 @@ if not prof_urls:
 
 print('Begin scraping data...')
 
-# for prof_url in prof_urls[2430:]:
 for prof_url in prof_urls:
     print('\t> scraping data from page ' + str(pid_count + 1) + '/'
           + str(len(prof_urls)) + ': ' + prof_url)
@@ -119,7 +118,7 @@ driver.close()
 print('End scraping data...')
 
 pickle_file_name = "./polyratings_scrape_" \
-    + str(datetime.datetime.now().strftime("%b-%d-%Y_%H:%M:%S"))
+    + str(datetime.now().strftime("%b-%d-%Y_%H:%M:%S"))
 
 print("Pickling data to file: " + pickle_file_name)
 
