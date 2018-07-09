@@ -19,6 +19,7 @@ app.use('/api/professor', professorRouter);
 // Error handler
 app.use(function(err, req, res, next) {
   console.log(err.message);
+  console.log("HI")
   res.status(err.status || 500).send(err.message);
 });
 
