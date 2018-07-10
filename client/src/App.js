@@ -1,5 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Navbar from './Navbar';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import green from '@material-ui/core/colors/green';
+import yellow from '@material-ui/core/colors/yellow';
+import red from '@material-ui/core/colors/red';
+import ProfessorTable from './ProfessorTable'
+
+const theme = createMuiTheme({
+  palette: {
+    primary: green,
+    secondary: yellow,
+    error: red,
+    // Used by `getContrastText()` to maximize the contrast between the background and
+    // the text.
+    contrastThreshold: 3,
+    // Used to shift a color's luminance by approximately
+    // two indexes within its tonal palette.
+    // E.g., shift from Red 500 to Red 300 or Red 700.
+    tonalOffset: 0.2,
+  },
+});
+
 
 class App extends Component {
   // Initialize state
@@ -21,37 +44,13 @@ class App extends Component {
     const { professors } = this.state;
 
     return (
-      <div className="App">
-        {/* Render the professors if we have them */}
-        {professors.length ? (
-          <div>
-            <h1>All professors</h1>
-            <ul className="professors">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of professors, and they never
-                change positions in the array.
-              */}
-              {professors.map((professor, index) =>
-                <li key={index}>
-                  {professor.f_name}
-                </li>
-              )}
-            </ul>
-          </div>
-        ) : (
-          // Render a helpful message otherwise
-          <div>
-            <h1>No professors :(</h1>
-            <button
-              className="more"
-              onClick={this.getProfessors}>
-              Try Again?
-            </button>
-          </div>
-        )}
-      </div>
+      <MuiThemeProvider theme={theme}>
+        <React.Fragment>
+          <CssBaseline />
+          <Navbar />
+          <ProfessorTable data = { professors }/>
+        </React.Fragment>
+      </MuiThemeProvider>
     );
   }
 }
